@@ -3,6 +3,7 @@ package com.example.usermanagement.service;
 import com.example.usermanagement.entity.User;
 import com.example.usermanagement.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -10,11 +11,14 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     // Đăng ký người dùng mới
     public User registerUser(User user) {
         // Kiểm tra username/email đã tồn tại hay chưa có thể được thêm tại đây
         // Mã hóa mật khẩu nếu cần (sử dụng BCryptPasswordEncoder nếu tích hợp Spring Security)
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
